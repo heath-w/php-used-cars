@@ -38,26 +38,25 @@
     <tr>
       <th>ID</th>
       <th>Year</th>
-      <th>Mileage</th>
-      <th>Model</th>
-      <th>Doors</th>
       <th>Make</th>
+      <th>Model</th>
       <th>Color</th>
+      <th>Doors</th>
+      <th>Mileage</th>
     </tr>
 
 <?php
 
-
   foreach (getInventory() as $car) {
-    // var_dump($car);
-    // $car is an associative array
 
     echo "<tr>";    
-
-    foreach ($car as $field => $value) {
-      echo "<td>$value</td>";
-    }
-
+    echo "<td>" . $car['id'] . "</td>";
+    echo "<td>" . $car['year'] . "</td>";
+    echo "<td>" . $car['make'] . "</td>";
+    echo "<td>" . $car['model'] . "</td>";
+    echo "<td>" . $car['color'] . "</td>";
+    echo "<td>" . $car['doors'] . "</td>";
+    echo "<td>" . $car['mileage'] . "</td>";
     echo "</tr>\n";
 
   }
