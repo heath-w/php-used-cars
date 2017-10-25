@@ -66,9 +66,9 @@
     $request = pg_query( getDb(), "
         SELECT i.id, i.year, i.mileage, mo.name as model, mo.doors, ma.name as make, c.name as color
         FROM inventory i
-        JOIN model mo ON i.model_id = mo.id
-        JOIN make ma ON mo.make_id = ma.id
-        JOIN color c ON i.color_id = c.id;
+        JOIN models mo ON i.model_id = mo.id
+        JOIN makes ma ON mo.make_id = ma.id
+        JOIN colors c ON i.color_id = c.id;
     ");
     return pg_fetch_all($request);
   }
