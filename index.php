@@ -13,22 +13,19 @@
 
   function getDb() {
 
+    // phpinfo();
+
     if ( file_exists( '.env' ) ) {
       require __DIR__ . '/vendor/autoload.php';
       $dotenv = new Dotenv\Dotenv( __DIR__ );
       $dotenv->load();
     }
 
-    // Heroku Postgres instance postgres://gthpzhaqkqjlzn:a49a94228ee37f025ecee902de3cbd38c059821cb70c4d10989ecb6837115540@ec2-54-163-245-150.compute-1.amazonaws.com:5432/d3jmmkjcnocfm3
-
-    $raw_heroku_postgres_url = 'postgres://gthpzhaqkqjlzn:a49a94228ee37f025ecee902de3cbd38c059821cb70c4d10989ecb6837115540@ec2-54-163-245-150.compute-1.amazonaws.com:5432/d3jmmkjcnocfm3';
-
-    // $url = parse_url( $raw_heroku_postgres_url );
     $env_database_url = getenv( 'DATABASE_URL' );
-    var_dump( $env_database_url );
+    // var_dump( $env_database_url );
 
     $url = parse_url( $env_database_url );
-    var_dump( $url );
+    // var_dump( $url );
 
     $db_port = $url['port'];
     $db_host = $url['host'];
@@ -36,11 +33,11 @@
     $db_pass = $url['pass'];
     $db_name = substr( $url['path'], 1 );
 
-    echo "<br>db_host: " . $db_host . "<br>";
-    echo "<br>db_port: " . $db_port . "<br>";
-    echo "<br>db_user: " . $db_user . "<br>";
-    echo "<br>db_pass: " . $db_pass . "<br>";
-    echo "<br>db_name: " . $db_name . "<br>";
+    // echo "<br>db_host: " . $db_host . "<br>";
+    // echo "<br>db_port: " . $db_port . "<br>";
+    // echo "<br>db_user: " . $db_user . "<br>";
+    // echo "<br>db_pass: " . $db_pass . "<br>";
+    // echo "<br>db_name: " . $db_name . "<br>";
 
     // Localhost $db = pg_connect("host=localhost port=5432 dbname=cars_dev user=carsuser password=carscarscars");
     $connect_string = 
@@ -50,27 +47,25 @@
       " user=" .     $db_user .
       " password=" . $db_pass;
 
-    echo "<br>Connection string: " . $connect_string . "<br>";
+    // echo "<br>Connection string: " . $connect_string . "<br>";
 
     $db = pg_connect( $connect_string );
-      //  "host=" .     $db_host . 
-      // " port=" .     $db_port . 
-      // " dbname=" .   $db_name .
-      // " user=" .     $db_user .
-      // " password=" . $db_pass );
 
     return $db;
   }
 
   function getInventory() {
-    $request = pg_query( getDb(), "
+    $dbConn = getDb();
+
+    $request = pg_query( $dbConn, "
         SELECT i.id, i.year, i.mileage, mo.name as model, mo.doors, ma.name as make, c.name as color
         FROM inventory i
         JOIN models mo ON i.model_id = mo.id
         JOIN makes ma ON mo.make_id = ma.id
         JOIN colors c ON i.color_id = c.id;
     ");
-    return pg_fetch_all($request);
+
+    return pg_fetch_all( $request );
   }
 
 ?>
